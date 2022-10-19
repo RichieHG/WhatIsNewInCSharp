@@ -1,4 +1,7 @@
-﻿using ConsoleApp.v9;
+﻿using ConsoleApp.v10;
+using ConsoleApp.v9;
+using System.Diagnostics.Contracts;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace ConsoleApp
@@ -78,8 +81,40 @@ namespace ConsoleApp
 
             #endregion
 
-            #region SourceGenerators
-            Console.WriteLine(new Foo().Bar) ;
+            #region V9 -SourceGenerators
+            //Console.WriteLine(new Foo().Bar) ;
+            #endregion
+
+            #region V10 - Record Structs
+            Point<int> point = new(2, 3);
+            Console.WriteLine(point);
+
+            Coords coords = new(1, 2);
+            Console.WriteLine(coords);
+
+            Student obj = new Student() {
+                Id = 4,
+                Name = "Sam",
+                Father = new() { Name = "Luis", Age = 50 }
+            };
+
+            if (obj is Student {
+                Father.Name: "Luis",
+                Father.Age: 50
+            } d)
+            {
+                Console.WriteLine(d.Id);
+            }
+            else Console.WriteLine("Hola");
+
+
+            var parse = (string s) => int.Parse(s);
+            Console.WriteLine(parse("5"));
+
+            var square = [Obsolete] double ( int s) => s*s + 1.5;
+            square(5);
+
+            var pow = () => square(5);
             #endregion
         }
 
@@ -95,6 +130,7 @@ namespace ConsoleApp
         //}
         #endregion
     }
+
 }
 
 #region V9 - Top Level Calls

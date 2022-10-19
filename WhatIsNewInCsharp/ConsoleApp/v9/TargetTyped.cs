@@ -10,6 +10,7 @@ namespace ConsoleApp.v9
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public Father Father { get; set; }
 
         public Student()
         {
@@ -20,5 +21,11 @@ namespace ConsoleApp.v9
             Id = id;
             Name = name;
         }
+    }
+
+    public class Father
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
     }
 }
