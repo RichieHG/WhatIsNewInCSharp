@@ -62,6 +62,54 @@ namespace ConsoleApp
         }
         #endregion
 
+        #region V7 - ThrowExpressions
+        public string Name { get; set; }
+
+        //public Program(string _name)
+        //{
+        //    //if(_name == null)
+        //    //{
+        //    //    throw new ArgumentNullException(paramName: nameof(_name));
+        //    //}
+        //    //Name = _name;
+
+        //    Name = _name ?? throw new ArgumentNullException(paramName: nameof(_name)); 
+        //}
+
+        int GetValue(int n)
+        {
+            return n > 0 ? n + 1 : throw new Exception();
+        }
+        #endregion
+
+        #region V7 - Generalized Async Return Types
+
+        public static async Task<long> GetDirSize(string dir)
+        {
+            if (!Directory.EnumerateFileSystemEntries(dir).Any())
+                return 0;
+
+            return await Task.Run(() =>
+            {
+                return Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)
+                .Sum(f => new FileInfo(f).Length);
+            });
+        }
+
+        public static async ValueTask<long> GetDirSize2(string dir)
+        {
+            if (!Directory.EnumerateFileSystemEntries(dir).Any())
+                return 0;
+
+            return await Task.Run(() =>
+            {
+                return Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)
+                .Sum(f => new FileInfo(f).Length);
+            });
+        }
+
+        #endregion
+
         #region V9 - Pattern Matching
         //public static bool IsLetter(char c) =>
         //   c is >= 'a' and <= 'z' or >= 'A' and <= 'Z';
@@ -193,6 +241,49 @@ namespace ConsoleApp
 
             //minR = 19;
             //Console.WriteLine($"Min = {minR} | A = {a} | B = {b}");
+            #endregion
+
+            #region V7 - ExpressionBodiedMembers
+            //var sodas = new Soda(2, "Cocacola");
+            //Console.WriteLine(sodas.Name);
+            #endregion
+
+            #region V7 - ThrowExceptions
+
+            //int a = -1;
+            //try
+            //{
+            //    var p = new Program("");
+            //    a = p.GetValue(a);
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.ToString());
+            //}
+            //finally
+            //{
+            //    Console.WriteLine(a);
+            //}
+
+
+            #endregion
+
+            #region V7 - GeneralizedAsyncReturnTypes
+
+            //Console.WriteLine(GetDirSize2(@"C:\tempGen").Result);
+
+            #endregion
+
+            #region V7 - LiteralImprovements
+
+            //Underscore '_' allow us to separate big numbers to see it more organized
+            //It also works with Hexa an binaries
+            int a = 1_735;
+            int b = 1_42_1;
+
+            Console.WriteLine(a);
+            Console.WriteLine(b);
+
             #endregion
 
             #region V9 - Record Types
