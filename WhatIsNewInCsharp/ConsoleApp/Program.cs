@@ -1,14 +1,116 @@
 ﻿using ConsoleApp.v10;
+using ConsoleApp.v7;
 using ConsoleApp.v9;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace ConsoleApp
 {
     public class Program
     {
-        #region V9 - Pettern Matching
+
+        #region V7 - Pattern Matching
+
+        //public void DisplayShape(Shape shape)
+        //{
+        //    if (shape is Rectangle)
+        //    {
+        //        var rc = (Rectangle)shape;
+        //    }
+
+        //    var rec = shape as Rectangle;
+        //    if(rec != null)
+        //    {
+        //        Console.WriteLine("It's a rectangle");
+        //    }
+
+        //    //New feature
+        //    if(shape is Rectangle r)
+        //    {
+
+        //    }
+
+        //    if(!(shape is Circle notCircle))
+        //    {
+
+        //    }
+
+        //    switch (shape)
+        //    {
+        //        case Circle c:
+
+        //            break;
+        //        case Rectangle rc when (rc.Height != rc.Width):
+        //            break;
+        //    }
+        //}
+        #endregion
+
+        #region V7 - Tuples
+
+        static Tuple<double, double> SumAndProduct(double a, double b)
+        {
+            return Tuple.Create(a + b, a * b);
+        }
+
+        static (double sum, double product, double pow) NewSumAndProduct(double a, double b)
+        {
+            return (a + b, a * b, Math.Pow(a,b));
+        }
+        #endregion
+
+        #region V7 - ThrowExpressions
+        public string Name { get; set; }
+
+        //public Program(string _name)
+        //{
+        //    //if(_name == null)
+        //    //{
+        //    //    throw new ArgumentNullException(paramName: nameof(_name));
+        //    //}
+        //    //Name = _name;
+
+        //    Name = _name ?? throw new ArgumentNullException(paramName: nameof(_name)); 
+        //}
+
+        int GetValue(int n)
+        {
+            return n > 0 ? n + 1 : throw new Exception();
+        }
+        #endregion
+
+        #region V7 - Generalized Async Return Types
+
+        public static async Task<long> GetDirSize(string dir)
+        {
+            if (!Directory.EnumerateFileSystemEntries(dir).Any())
+                return 0;
+
+            return await Task.Run(() =>
+            {
+                return Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)
+                .Sum(f => new FileInfo(f).Length);
+            });
+        }
+
+        public static async ValueTask<long> GetDirSize2(string dir)
+        {
+            if (!Directory.EnumerateFileSystemEntries(dir).Any())
+                return 0;
+
+            return await Task.Run(() =>
+            {
+                return Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)
+                .Sum(f => new FileInfo(f).Length);
+            });
+        }
+
+        #endregion
+
+        #region V9 - Pattern Matching
         //public static bool IsLetter(char c) =>
         //   c is >= 'a' and <= 'z' or >= 'A' and <= 'Z';
 
@@ -17,6 +119,173 @@ namespace ConsoleApp
         #endregion
         static void Main(string[] args)
         {
+            #region V7 - Out Variables
+            //DateTime dt;
+            //if (DateTime.TryParse("01/01/1990", out dt)) Console.WriteLine(dt);
+
+            //if (DateTime.TryParse("02/08/1996", out DateTime birthDate))
+            //    Console.WriteLine(birthDate);
+
+            //Console.WriteLine(birthDate.Month);
+
+            //int.TryParse("abc", out var i);
+            //Console.WriteLine(i);
+            #endregion
+
+            #region V7 - Tuples
+            //var sp = SumAndProduct(2, 3);
+            //Console.WriteLine($"sum = {sp.Item1} | product = {sp.Item2}");
+
+            //var newSP = NewSumAndProduct(2, 3);
+            //Console.WriteLine($"sum = {newSP.sum} | product = {newSP.product} | pow = {newSP.pow}");
+            //Console.WriteLine(newSP.GetType());
+
+            //(double ss, double pp, double ppp) = NewSumAndProduct(2, 3);
+            //Console.WriteLine($"sum = {ss} | product = {pp} | pow = {ppp}");
+
+            //var (sum, product, pow) = NewSumAndProduct(2, 3);
+            //Console.WriteLine($"sum = {sum} | product = {product} | pow = {pow}");
+
+            //double s, p, pw;
+            //(s,p,pw) = NewSumAndProduct(2, 3);
+            //Console.WriteLine($"sum = {s} | product = {p} | pow = {pw}");
+
+            //var me = (name: "Nefta", age: 26);
+            //Console.WriteLine(me);
+            //Console.WriteLine(me.GetType());
+            //Console.WriteLine(me.name);
+            //Console.WriteLine(me.age);
+
+            //var snp = new Func<double, double, (double sum, double product, double pow)>((a, b) => (a +b, a *b, Math.Pow(a,b)));
+            //var result = snp(2, 3);
+            //Console.WriteLine($"sum = {result.sum} | product = {result.product} | pow = {result.pow}");
+            #endregion
+
+            #region V7 - Deconstruction
+            //var me = (name: "Nefta", age: 26);
+            //var (name, age) = me;
+
+            //var myPoint = new Coordinate();
+            //myPoint.X = 5;
+            //var (x, y) = myPoint;
+            //Console.WriteLine($"{x}");
+
+
+            ////If you dont care "X" value, you can use underscore '_'
+            //var (x2, _) = myPoint;
+            //Console.WriteLine($"{x2}");
+            #endregion
+
+            #region V7 - LocalFunctions
+            //var result = EquationSolver.SolveQuadratic(1,10,16);
+            //Console.WriteLine(result);
+
+            #endregion
+
+            #region V7 - Ref Returns and Locals
+            //int[] numbers = { 1, 2, 3, 4, 5, 6, };
+
+            //ref int refToSecond = ref numbers[1];
+
+
+            ////refToSecond = ref numbers[3];
+            //refToSecond = 123;
+            //var valueOfSecond = refToSecond;
+
+            //Array.Resize(ref numbers, 1);
+
+            //Console.WriteLine($"Second = {refToSecond} | ArraySize = {numbers.Length}");
+
+            //refToSecond = 321;
+            //numbers.SetValue(321, 0);
+            //Console.WriteLine($"Second = {refToSecond} | ArraySize = {numbers.Length}");
+
+            //Console.WriteLine(String.Join(",",numbers));
+
+            //var numbersList = new List<int> { 1,2,3,4,5,6,7 };
+            ////ref int second = ref numbersList[2];
+
+            //ref int Find(int[] numbersArray, int value) {
+            //    for(int i = 0; i< numbersArray.Length; i++)
+            //    {
+            //        if (numbersArray[i] == value) return ref numbersArray[i];
+            //    }
+            //    throw new ArgumentException("NotFound");
+            //};
+
+            //int[] moreNumbers = { 20, 30, 40 };
+            //ref int refTo30 = ref Find(moreNumbers, 30);
+            //Console.WriteLine($"Reference = {refTo30} | Array = {String.Join(",", moreNumbers)}");
+
+            //refTo30 = 1000;
+
+            //Find(moreNumbers, 40) = 121212;
+            //Console.WriteLine($"Reference = {refTo30} | Array = {String.Join(",", moreNumbers)}");
+
+            //ref int Min(ref int x, ref int y)
+            //{
+            //    if (x < y) return ref x;
+            //    else return ref y;
+            //}
+
+            //int a = 1, b=2;
+            //int min = Min(ref a, ref b);
+
+            //Console.WriteLine($"Min = {min} | A = {a} | B = {b}");
+
+            //min = 19;
+            //Console.WriteLine($"Min = {min} | A = {a} | B = {b}");
+
+            //ref int minR = ref Min(ref a, ref b);
+            //Console.WriteLine($"Min = {minR} | A = {a} | B = {b}");
+
+            //minR = 19;
+            //Console.WriteLine($"Min = {minR} | A = {a} | B = {b}");
+            #endregion
+
+            #region V7 - ExpressionBodiedMembers
+            //var sodas = new Soda(2, "Cocacola");
+            //Console.WriteLine(sodas.Name);
+            #endregion
+
+            #region V7 - ThrowExceptions
+
+            //int a = -1;
+            //try
+            //{
+            //    var p = new Program("");
+            //    a = p.GetValue(a);
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.ToString());
+            //}
+            //finally
+            //{
+            //    Console.WriteLine(a);
+            //}
+
+
+            #endregion
+
+            #region V7 - GeneralizedAsyncReturnTypes
+
+            //Console.WriteLine(GetDirSize2(@"C:\tempGen").Result);
+
+            #endregion
+
+            #region V7 - LiteralImprovements
+
+            //Underscore '_' allow us to separate big numbers to see it more organized
+            //It also works with Hexa an binaries
+            int a = 1_735;
+            int b = 1_42_1;
+
+            Console.WriteLine(a);
+            Console.WriteLine(b);
+
+            #endregion
+
             #region V9 - Record Types
             //var t = typeof(Person);
             //foreach(var m in t.GetMembers())
@@ -86,35 +355,35 @@ namespace ConsoleApp
             #endregion
 
             #region V10 - Record Structs
-            Point<int> point = new(2, 3);
-            Console.WriteLine(point);
+            //Point<int> point = new(2, 3);
+            //Console.WriteLine(point);
 
-            Coords coords = new(1, 2);
-            Console.WriteLine(coords);
+            //Coords coords = new(1, 2);
+            //Console.WriteLine(coords);
 
-            Student obj = new Student() {
-                Id = 4,
-                Name = "Sam",
-                Father = new() { Name = "Luis", Age = 50 }
-            };
+            //Student obj = new Student() {
+            //    Id = 4,
+            //    Name = "Sam",
+            //    Father = new() { Name = "Luis", Age = 50 }
+            //};
 
-            if (obj is Student {
-                Father.Name: "Luis",
-                Father.Age: 50
-            } d)
-            {
-                Console.WriteLine(d.Id);
-            }
-            else Console.WriteLine("Hola");
+            //if (obj is Student {
+            //    Father.Name: "Luis",
+            //    Father.Age: 50
+            //} d)
+            //{
+            //    Console.WriteLine(d.Id);
+            //}
+            //else Console.WriteLine("Hola");
 
 
-            var parse = (string s) => int.Parse(s);
-            Console.WriteLine(parse("5"));
+            //var parse = (string s) => int.Parse(s);
+            //Console.WriteLine(parse("5"));
 
-            var square = [Obsolete] double ( int s) => s*s + 1.5;
-            square(5);
+            //var square = [Obsolete] double ( int s) => s*s + 1.5;
+            //square(5);
 
-            var pow = () => square(5);
+            //var pow = () => square(5);
             #endregion
         }
 

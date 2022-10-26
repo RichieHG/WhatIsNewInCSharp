@@ -3,6 +3,10 @@
     "ConsoleApp": {
       "commandName": "Project",
       "commandLineArgs": "Hello"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
     }
   }
 }
