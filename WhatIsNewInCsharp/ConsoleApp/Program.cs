@@ -1,5 +1,6 @@
 ﻿using ConsoleApp.v10;
 using ConsoleApp.v7;
+using ConsoleApp.v7._1;
 using ConsoleApp.v9;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
@@ -11,6 +12,10 @@ namespace ConsoleApp
 {
     public class Program
     {
+
+        #region V7.1 - Async Main
+        private static string url = "http://google.com/robots.txt";
+        #endregion
 
         #region V7 - Pattern Matching
 
@@ -58,7 +63,7 @@ namespace ConsoleApp
 
         static (double sum, double product, double pow) NewSumAndProduct(double a, double b)
         {
-            return (a + b, a * b, Math.Pow(a,b));
+            return (a + b, a * b, Math.Pow(a, b));
         }
         #endregion
 
@@ -108,6 +113,43 @@ namespace ConsoleApp
             });
         }
 
+        #endregion
+
+        #region V7.1 - AsyncMain
+
+        //private static async Task MainAsync(string s)
+        //{
+        //    Console.WriteLine(await new HttpClient().GetStringAsync(s));
+        //}
+
+        //static async Task Main(string[] args) // or ()
+        //{
+        //    Console.WriteLine(await new HttpClient().GetStringAsync(url));
+
+        //}
+
+        #endregion
+
+        #region V7.1 - DefaultExpressions
+        public static DateTime GetTimestamps(List<int> items = default)
+        {
+            return default;
+        }
+        #endregion
+
+        #region V7.1 - PatternMatchingGenerics
+        public static void Cook<T>(T animal) where T : Animal
+        {
+           if(animal is  Pig pig) { }
+
+            switch (animal)
+            {
+                case Pig pork:
+                    break;
+                default:
+                    break;
+            }
+        }
         #endregion
 
         #region V9 - Pattern Matching
@@ -278,11 +320,73 @@ namespace ConsoleApp
 
             //Underscore '_' allow us to separate big numbers to see it more organized
             //It also works with Hexa an binaries
-            int a = 1_735;
-            int b = 1_42_1;
+            //int a = 1_735;
+            //int b = 1_42_1;
 
-            Console.WriteLine(a);
-            Console.WriteLine(b);
+            //Console.WriteLine(a);
+            //Console.WriteLine(b);
+
+            #endregion
+
+            #region V7.1 - Async Main
+            //Console.WriteLine(await new HttpClient().GetStringAsync(url));
+
+            //MainAsync(url).GetAwaiter().GetResult();
+
+            #endregion
+
+            #region V7.1 - DefaultExpressions
+
+            ////In other days
+            //int a = default(int);
+            //const int b = default;
+            ////const int? d = default; //Doesnt works because is a constant
+            //int? d = default;
+            //Console.WriteLine($"a = {a}  b = {b}  d ={d}");
+
+            //var e = new[] { default, 33, default };
+            //Console.WriteLine(string.Join(",", e));
+
+            //int[] e2 = new int[] { default, default, default };
+            //Console.WriteLine(string.Join(",", e2));
+
+            //string s = default;
+            //Console.WriteLine(s);
+
+            //if(s == default)
+            //{
+
+            //}
+
+            //var x = a > 0 ? default : 1.5;
+
+
+            //Console.WriteLine(GetTimestamps());
+            #endregion
+
+            #region V7.1 - Infer TuplesNames
+            //var me = (name: "Nefta", age: 26);
+            //Console.WriteLine(me);
+
+            //var alsoMe = (me.age, me.name, "Male");
+            //Console.WriteLine(alsoMe.age);
+
+            //var months = new[] { "March", "April", "June" };
+
+            //var result = months.Select( x => 
+            //(x.Length, FirstChar: x[0])).Where(x => x.Length == 5);
+
+            //Console.WriteLine(String.Join(",", result));
+
+            //var now = DateTime.Now;
+            //var u = (now.Hour, now.Minute);
+            //var v = (u.Hour, u.Minute) = (7, 23);
+
+            //Console.WriteLine(v.Minute.ToString());
+            #endregion
+
+            #region V7.1 - PatternMatchingGenerics
+
 
             #endregion
 
