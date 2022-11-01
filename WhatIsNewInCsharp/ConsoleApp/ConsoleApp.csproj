@@ -8,12 +8,11 @@
 	<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 	<CompilerGeneratedFilesOutputPath>C:\tempGen</CompilerGeneratedFilesOutputPath>
 	<StartupObject></StartupObject>
+	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Generator\Generator.csproj" OutputItemType="Analyzer">
-      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
-    </ProjectReference>
+    <ProjectReference Include="..\Generator\Generator.csproj" />
   </ItemGroup>
 
 </Project>

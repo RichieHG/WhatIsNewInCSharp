@@ -1,12 +1,14 @@
 ﻿using ConsoleApp.v10;
 using ConsoleApp.v7;
 using ConsoleApp.v7._1;
+using ConsoleApp.v7._2;
 using ConsoleApp.v9;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Xml.Schema;
 
 namespace ConsoleApp
 {
@@ -138,19 +140,75 @@ namespace ConsoleApp
         #endregion
 
         #region V7.1 - PatternMatchingGenerics
-        public static void Cook<T>(T animal) where T : Animal
-        {
-           if(animal is  Pig pig) { }
+        //public static void Cook<T>(T animal) where T : Animal
+        //{
+        //   if(animal is  Pig pig) { }
 
-            switch (animal)
-            {
-                case Pig pork:
-                    break;
-                default:
-                    break;
-            }
+        //    switch (animal)
+        //    {
+        //        case Pig pork:
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
+        #endregion
+
+        #region V7.2 - NonTrailingNamedArgs
+        static void doSomething(int foo, int bar)
+        {
+
         }
         #endregion
+
+        #region V7.2 - InParams
+        double MeasureDistance(in v7._2.Point p1, in v7._2.Point p2)
+        {
+            //p1.X = 1;
+            //ChangeMe(ref p1);
+            p1.Reset();
+
+            var dx = p1.X - p2.X;
+            var dy = p1.Y - p2.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        double MeasureDistance(v7._2.Point p1, v7._2.Point p2)
+        {
+            //p1.X = 1;
+            //ChangeMe(ref p1);
+            p1.Reset();
+
+            var dx = p1.X - p2.X;
+            var dy = p1.Y - p2.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        void ChangeMe(ref v7._2.Point p)
+        {
+            p.X++;
+        }
+        public Program()
+        {
+            v7._2.Point p1 = new(1, 1);
+            v7._2.Point p2 = new() { X = 4, Y = 5 };
+
+            var distance = MeasureDistance(in p1, in p2);
+
+            Console.WriteLine($"Distance between p1: {p1} and p2:{p2} is {distance:f2}");
+
+            var distanceFromOrigin = MeasureDistance(p1, v7._2.Point.Origin);
+            Console.WriteLine($"Distance from Origin is {distanceFromOrigin:f2}");
+
+            var copyOfOrigin = v7._2.Point.Origin; //by-value
+
+            //ref var messWithOrigin = ref v7._2.Point.Origin; //Doesnt work because Origin is a readonly
+
+            ref readonly var originRef = ref v7._2.Point.Origin;
+        }
+        #endregion
+
+       
 
         #region V9 - Pattern Matching
         //public static bool IsLetter(char c) =>
@@ -385,8 +443,59 @@ namespace ConsoleApp
             //Console.WriteLine(v.Minute.ToString());
             #endregion
 
-            #region V7.1 - PatternMatchingGenerics
+            #region V7.2 - LeadingDigitSeparator
+            //var x = 0b_11_000000;
+            //var y = 0x_baad_f00d;
 
+            //Console.WriteLine(x);
+            //Console.WriteLine(y);
+            #endregion
+
+            #region V7.2 - PrivateProtected
+
+            //Base b = new Base();
+
+            //Console.WriteLine(b.b);
+            #endregion
+
+            #region V7.2 -  NonTrailingNamedArgs
+
+            //doSomething(bar: 13, foo: 12);
+            //doSomething(foo: 13, 12);
+            #endregion
+
+            #region V7.2 - InParams
+
+            //new Program();
+
+            #endregion
+
+            #region V7.2 - Span<T>
+
+            unsafe
+            {
+                byte* ptr = stackalloc byte[100];
+                Span<byte> memory = new Span<byte>(ptr, 100);
+                
+                IntPtr unmanagedPtr = Marshal.AllocHGlobal(123);
+                Span<byte> unmanagedMemory = new Span<byte>(unmanagedPtr.ToPointer(), 123);
+
+                Marshal.FreeHGlobal(unmanagedPtr);
+
+                char[] stuff = "hello".ToCharArray();
+
+                Span<char> arrayMemory = stuff;
+
+                ReadOnlySpan<char> more = "hi there!".AsSpan();
+
+                Console.WriteLine($"Out span has {more.Length} elements");
+
+                arrayMemory.Fill('x');
+                Console.WriteLine(stuff);
+                arrayMemory.Clear();
+                Console.WriteLine(stuff);
+
+            }
 
             #endregion
 
