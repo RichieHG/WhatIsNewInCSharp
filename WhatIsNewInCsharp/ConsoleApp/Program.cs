@@ -2,8 +2,10 @@
 using ConsoleApp.v7;
 using ConsoleApp.v7._1;
 using ConsoleApp.v7._2;
+using ConsoleApp.v8;
 using ConsoleApp.v9;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -208,7 +210,29 @@ namespace ConsoleApp
         }
         #endregion
 
-       
+        #region V8 - PatternMatching
+
+        static IEnumerable<int> GetMainOfficeNumbers()
+        {
+            var numbers = new ExtendedPhoneNumber[] { 
+                new() { Code = 5, Number = 354, Office = "TI"}, 
+                new() { Code = 5, Number = 4812, Office = "TI"}, 
+                new() { Code = 47, Number = 440, Office = "PMO"}, 
+                new() { Code = 47, Number = 785, Office = "PMO"}, 
+                new() { Code = 75, Number = 1278, Office = "Infra"}
+
+            };
+
+            foreach(var pn in numbers)
+            {
+                if(pn is not ExtendedPhoneNumber { Office: "PMO" })
+                {
+                    yield return pn.Number;
+                }
+            }
+        }
+    
+        #endregion
 
         #region V9 - Pattern Matching
         //public static bool IsLetter(char c) =>
@@ -472,31 +496,150 @@ namespace ConsoleApp
 
             #region V7.2 - Span<T>
 
-            unsafe
+            //unsafe
+            //{
+            //    byte* ptr = stackalloc byte[100];
+            //    Span<byte> memory = new Span<byte>(ptr, 100);
+
+            //    IntPtr unmanagedPtr = Marshal.AllocHGlobal(123);
+            //    Span<byte> unmanagedMemory = new Span<byte>(unmanagedPtr.ToPointer(), 123);
+
+            //    Marshal.FreeHGlobal(unmanagedPtr);
+
+            //    char[] stuff = "hello".ToCharArray();
+
+            //    Span<char> arrayMemory = stuff;
+
+            //    ReadOnlySpan<char> more = "hi there!".AsSpan();
+
+            //    Console.WriteLine($"Out span has {more.Length} elements");
+
+            //    arrayMemory.Fill('x');
+            //    Console.WriteLine(stuff);
+            //    arrayMemory.Clear();
+            //    Console.WriteLine(stuff);
+
+            //}
+
+            #endregion
+
+            #region V8 - Nullable Reference Type
+
+            //var p = new v8.Person("Ricardo", "Hernandez", "Neftali");
+
+            //Console.WriteLine(p.FullName);
+
+            ////var a = (null as v8.Person)!.FullName; // This symbol ! help us to let know to compiler
+            ////                                       // that we are pretty sure that that thing woun't be null
+            ////Console.WriteLine(a);
+
+            //var b = (null as v8.Person)!?.FullName;
+            //Console.WriteLine(b);
+
+            #endregion
+
+            #region V8 - Indices and Range
+
+            //Index i0 = 2;
+            //Index i1 = new Index(0, false); //false indicate is fromBegining
+            //var i2 = ^2; // Index (0, true)
+            //                // -1 is not last
+
+            //var items = new[] { 1,2,3,4,5 };
+            //Console.WriteLine(string.Join(',', items));
+
+            //Console.WriteLine(string.Join(',', items[0..4]));
+            //Console.WriteLine(string.Join(',', items[0..^1]));
+            //Console.WriteLine(items[^0]);
+
+            //items[^2] = 33;
+            //Console.WriteLine(string.Join(',', items));
+
+            //var a = i1..i2; // Range(i1,i2)
+            //var b = i1..; // Range(i1, new Index(0,true))
+            //var c = ..i2; // Range(new Index(0, false), i2)
+            //var e = ..; //Entire range
+            //Range.EndAt(2);
+            #endregion
+
+            #region V8 - DefaultInterfaceMembers
+
+            //Human human = new() { Name = "Ricardo" };
+            //IHuman human = new Human() { Name = "Ricardo" };
+            //human.SayHello();
+            //((IHuman) new Human { Name = "Luis" }).SayHello();
+
+            //((IFriendlyHuman) new Human { Name = "Luis" }).SayHello();
+
+            //DualNational person = new DualNational { Name = "Ricardo Neftali" };
+            //((IHuman)person).SayHello();
+
+            //person.Greet();
+
+            //IAmBritish bp = person;
+            //bp.Greet();
+
+            #endregion
+
+            #region V8 - PatternMatching
+
+            //var phoneNumber = new PhoneNumber();
+
+            //phoneNumber.Code = 44;
+            //var origin = phoneNumber switch
+            //{
+            //    { Number: 112 } => "Emergency",
+            //    { Code: 44 } => "UK",
+            //    _ => "Unknown"
+            //    //{ }=> "Unknown"
+            //};
+            //Console.WriteLine(origin);
+
+            //v8.Person person = new( "Luis", "Hernandez", "Neftali", new() { Code= 52, Number=5578} );
+
+            //var personOrigin = person switch
+            //{
+            //    { FirstName: "Ricardo" } => "México",
+            //    { PhoneNumber: { Code: 52 } } => "Spain",
+            //    { FirstName: var name} => $"No idea where {name} lives"
+            //};
+
+            //Console.WriteLine(personOrigin);
+
+            //person = new("Luis", "Hernandez", "Neftali", new() { Code = 52, Number = 578 });
+
+            //var error = person switch
+            //{
+            //    null => "Object missing",
+            //    { PhoneNumber: null } => "Phone number missing entirely",
+            //    { PhoneNumber: { Number: 0} } => "Actual number missing",
+            //    { PhoneNumber: { Code: var code} } when code < 0 => "WTF?",
+            //    { } => null //no error
+            //};
+
+            //if(error != null)
+            //    throw new ArgumentException(error);
+
+            //var numbers = GetMainOfficeNumbers();
+
+            //Console.WriteLine(String.Join(',', numbers));
+
+            //object shape = new Rectangle() { Coordinate = (0,0), Height = 0, Width = 0};
+            //object shape = new Circle() { Coordinate = (0,0), Radius = 10};
+            //object shape = new Rectangle() { Coordinate = (0, 0), Height = 10, Width = 10 };
+            object shape = new Rectangle() { Coordinate = (0, 0), Height = 6, Width = 10 };
+
+            var type = shape switch
             {
-                byte* ptr = stackalloc byte[100];
-                Span<byte> memory = new Span<byte>(ptr, 100);
-                
-                IntPtr unmanagedPtr = Marshal.AllocHGlobal(123);
-                Span<byte> unmanagedMemory = new Span<byte>(unmanagedPtr.ToPointer(), 123);
+                Rectangle((0,0),0,0) => "Point at origin",
+                Circle((0, 0), _) => "Circle at origin",
+                Rectangle(_, var w, var h) when w == h => "Square",
+                Rectangle((var x, var y), var w, var h) =>
+                $"A {w}x{h} rectangle at ({x},{y})",
+                _ => "Something else"
+            };
 
-                Marshal.FreeHGlobal(unmanagedPtr);
-
-                char[] stuff = "hello".ToCharArray();
-
-                Span<char> arrayMemory = stuff;
-
-                ReadOnlySpan<char> more = "hi there!".AsSpan();
-
-                Console.WriteLine($"Out span has {more.Length} elements");
-
-                arrayMemory.Fill('x');
-                Console.WriteLine(stuff);
-                arrayMemory.Clear();
-                Console.WriteLine(stuff);
-
-            }
-
+            Console.WriteLine(type);
             #endregion
 
             #region V9 - Record Types

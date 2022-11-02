@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp.v7._2
 {
-    struct Point
+    public struct Point
     {
         public double X, Y;
 
